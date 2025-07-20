@@ -10,6 +10,7 @@
 @import url('./container.css');
 @import url('./animations.css');
 @import url('./loader.css');
+@import url('./visually-hidden.css');
 
 .form {
   display: flex;
@@ -48,7 +49,8 @@
   }
 }
 
-.form-btn {
+.form-btn,
+.load-more-btn {
   background-color: #4e75ff;
   border-radius: 8px;
   padding: 8px 16px;
@@ -65,6 +67,12 @@
   &:hover {
     background-color: #6c8cff;
   }
+}
+
+.load-more-btn {
+  display: block;
+  margin: 0 auto;
+  margin-top: 32px;
 }
 
 .gallery {

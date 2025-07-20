@@ -6,9 +6,11 @@ import { clearGallery, createGallery, hideLoader, showLoader } from "./js/render
 
 import icon from './img/error.svg';
 
-const form = document.querySelector('.form')
+const form = document.querySelector('.form');
+const loadMoreBtn = document.querySelector('.load-more-btn');
 
 form.addEventListener('submit', onFormSubmit)
+loadMoreBtn.addEventListener('click', onLoadMoreBtnClick)
 
 function onFormSubmit(event) {
     event.preventDefault()
