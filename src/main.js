@@ -48,12 +48,13 @@ async function onFormSubmit(event) {
         if (data.totalHits > 15) {
             showLoadMoreButton();
         }
+
+        form.elements['search-text'].value = '';
     } catch (error) {
         iziToastError(error.message);
+    } finally {
+        hideLoader();
     }
-
-    hideLoader();
-    form.elements['search-text'].value = ''
 
     console.log('end fn');
 }
@@ -61,22 +62,29 @@ async function onFormSubmit(event) {
 async function onLoadMoreBtnClick() {
     showLoader();
     page += 1;
-    const data = await getImagesByQuery(value, page);
-    createGallery(data.hits);
+    loadMoreBtn.disabled = true;
+    try {
+        const data = await getImagesByQuery(value, page);
+        createGallery(data.hits);
 
-    const itemGallery = gallery.children
-    const rect = itemGallery[0].getBoundingClientRect()
-    window.scrollBy({
-        top: rect.height * 2,
-        behavior: "smooth",
-    });
+        if (data.totalHits <= 15 * page) {
+            hideLoadMoreButton();
+            iziToastInforming("We're sorry, but you've reached the end of search results.");
+            page = 1;
+        }
 
-    if (data.totalHits <= 15 * page) {
-        hideLoadMoreButton();
-        iziToastInforming("We're sorry, but you've reached the end of search results.");
-        page = 1;
+        const itemGallery = gallery.children
+        const rect = itemGallery[0].getBoundingClientRect()
+        window.scrollBy({
+            top: rect.height * 2,
+            behavior: "smooth",
+        });
+    } catch (error) {
+        iziToastError(error.message);
+    } finally {
+        loadMoreBtn.disabled = false;
+        hideLoader();
     }
-    hideLoader();
 }
 
 function iziToastError(message) {
@@ -95,7 +103,7 @@ function iziToastError(message) {
 }
 
 function iziToastInforming(message) {
-    return iziToast.error({
+    return iziToast.info({
         class: 'izi-toast',
         message: message,
         messageColor: '#fff',
