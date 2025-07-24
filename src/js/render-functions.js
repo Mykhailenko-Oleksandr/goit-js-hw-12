@@ -1,8 +1,6 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-
-const gallery = document.querySelector('.gallery');
-const loader = document.querySelector('.js-loader');
+import { gallery, loader, loadMoreBtn } from "../main";
 
 let modalImg = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
@@ -12,7 +10,7 @@ let modalImg = new SimpleLightbox('.gallery a', {
 })
 
 export function createGallery(images) {
-    const galleryMarkup = images.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
+  const galleryMarkup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
 <li class="gallery-item">
  <a class="gallery-link" href="${largeImageURL}" >
            <img
@@ -41,9 +39,9 @@ export function createGallery(images) {
          </ul>
 </li> `
   ).join('');
-  
+
   gallery.insertAdjacentHTML('beforeend', galleryMarkup);
-    
+
   modalImg.refresh();
 }
 
@@ -52,9 +50,17 @@ export function clearGallery() {
 }
 
 export function showLoader() {
-loader.classList.add('is-visible')
+  loader.classList.add('is-visible');
 }
 
 export function hideLoader() {
-loader.classList.remove('is-visible')
+  loader.classList.remove('is-visible');
+}
+
+export function showLoadMoreButton() {
+  loadMoreBtn.classList.add('load-more-btn-is-visible');
+}
+
+export function hideLoadMoreButton() {
+  loadMoreBtn.classList.remove('load-more-btn-is-visible');
 }

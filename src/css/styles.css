@@ -10,7 +10,6 @@
 @import url('./container.css');
 @import url('./animations.css');
 @import url('./loader.css');
-@import url('./visually-hidden.css');
 
 .form {
   display: flex;
@@ -70,9 +69,13 @@
 }
 
 .load-more-btn {
-  display: block;
+  display: none;
   margin: 0 auto;
   margin-top: 32px;
+}
+
+.load-more-btn-is-visible {
+  display: block;
 }
 
 .gallery {
