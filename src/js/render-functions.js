@@ -1,6 +1,5 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-import { gallery, loader, loadMoreBtn } from "../main";
 
 let modalImg = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
@@ -9,7 +8,7 @@ let modalImg = new SimpleLightbox('.gallery a', {
   captionClass: 'gallery-caption',
 })
 
-export function createGallery(images) {
+export function createGallery(images, gallery) {
   const galleryMarkup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
 <li class="gallery-item">
  <a class="gallery-link" href="${largeImageURL}" >
@@ -45,22 +44,22 @@ export function createGallery(images) {
   modalImg.refresh();
 }
 
-export function clearGallery() {
+export function clearGallery(gallery) {
   gallery.innerHTML = '';
 }
 
-export function showLoader() {
+export function showLoader(loader) {
   loader.classList.add('is-visible');
 }
 
-export function hideLoader() {
+export function hideLoader(loader) {
   loader.classList.remove('is-visible');
 }
 
-export function showLoadMoreButton() {
+export function showLoadMoreButton(loadMoreBtn) {
   loadMoreBtn.classList.add('load-more-btn-is-visible');
 }
 
-export function hideLoadMoreButton() {
+export function hideLoadMoreButton(loadMoreBtn) {
   loadMoreBtn.classList.remove('load-more-btn-is-visible');
 }

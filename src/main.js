@@ -6,12 +6,10 @@ import { clearGallery, createGallery, hideLoader, hideLoadMoreButton, showLoader
 
 import icon from './img/error.svg';
 
-console.log('start code');
-
 const form = document.querySelector('.form');
-export const loadMoreBtn = document.querySelector('.load-more-btn');
-export const gallery = document.querySelector('.gallery');
-export const loader = document.querySelector('.js-loader');
+const loadMoreBtn = document.querySelector('.load-more-btn');
+const gallery = document.querySelector('.gallery');
+const loader = document.querySelector('.js-loader');
 
 
 form.addEventListener('submit', onFormSubmit);
@@ -21,10 +19,8 @@ let value;
 let page;
 
 async function onFormSubmit(event) {
-    event.preventDefault()
-    hideLoadMoreButton()
-
-    console.log('start fn');
+    event.preventDefault();
+    hideLoadMoreButton(loadMoreBtn);
 
     page = 1;
     value = form.elements['search-text'].value.trim();
@@ -33,8 +29,8 @@ async function onFormSubmit(event) {
         return iziToastError("You have not entered anything in the search!");
     }
 
-    clearGallery();
-    showLoader();
+    clearGallery(gallery);
+    showLoader(loader);
 
     try {
         const data = await getImagesByQuery(value, page);
@@ -42,39 +38,37 @@ async function onFormSubmit(event) {
         if (data.hits.length === 0) {
             iziToastError("Sorry, there are no images matching <br/>your search query. Please try again!");
         } else {
-            createGallery(data.hits);
+            createGallery(data.hits, gallery);
         }
 
         if (data.totalHits > 15) {
-            showLoadMoreButton();
+            showLoadMoreButton(loadMoreBtn);
         }
 
         form.elements['search-text'].value = '';
     } catch (error) {
         iziToastError(error.message);
     } finally {
-        hideLoader();
+        hideLoader(loader);
     }
-
-    console.log('end fn');
 }
 
 async function onLoadMoreBtnClick() {
-    showLoader();
+    showLoader(loader);
     page += 1;
     loadMoreBtn.disabled = true;
     try {
         const data = await getImagesByQuery(value, page);
-        createGallery(data.hits);
+        createGallery(data.hits, gallery);
 
         if (data.totalHits <= 15 * page) {
-            hideLoadMoreButton();
+            hideLoadMoreButton(loadMoreBtn);
             iziToastInforming("We're sorry, but you've reached the end of search results.");
             page = 1;
         }
 
-        const itemGallery = gallery.children
-        const rect = itemGallery[0].getBoundingClientRect()
+        const itemGallery = gallery.children;
+        const rect = itemGallery[0].getBoundingClientRect();
         window.scrollBy({
             top: rect.height * 2,
             behavior: "smooth",
@@ -83,7 +77,7 @@ async function onLoadMoreBtnClick() {
         iziToastError(error.message);
     } finally {
         loadMoreBtn.disabled = false;
-        hideLoader();
+        hideLoader(loader);
     }
 }
 
